@@ -37,6 +37,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "user",
   },
+
+  resetPasswordToken: String,
+  resetPasswordExpire: Date,
 });
 
 userSchema.pre("save", async function (next) {
@@ -55,8 +58,8 @@ userSchema.methods.getJWTToken = function () {
 
 // compare passwords
 
-userSchema.methods.comparePassword = async function (password) {
-  return await bcrypt.compare(password, this.password);
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
 };
 
 // Generating Password Reset Token

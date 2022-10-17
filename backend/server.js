@@ -4,8 +4,10 @@ const cookieParser = require("cookie-parser");
 const connectDatabase = require("./config/database");
 const errorMiddleWare = require("./middlewares/error");
 
+// Config
+require("dotenv").config({ path: "./config/config.env" });
+
 const app = express();
-const port = 3001;
 
 // Handling uncought exceptions
 process.on("uncaughtException", (err) => {
@@ -15,21 +17,24 @@ process.on("uncaughtException", (err) => {
 });
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(fileUpload());
 
 const product = require("./routes/productRoutes");
+const user = require("./routes/userRoutes");
 
 app.use("/api/v1", product);
+app.use("/api/v1", user);
 
 // Middleware to handle errors
 app.use(errorMiddleWare);
 
 connectDatabase();
 
-const server = app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+const server = app.listen(process.env.PORT, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
 });
 
 // UnhandledPromiseRejectionWarning
