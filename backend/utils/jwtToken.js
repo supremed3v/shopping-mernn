@@ -12,4 +12,4 @@ const sendToken = (user, statusCode, res) => {
   });
 };
 
-module.expots = sendToken;
+module.exports = sendToken;

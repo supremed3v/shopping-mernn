@@ -8,12 +8,14 @@ const {
   createProductReview,
   getProductReviews,
   deleteReview,
+  getInStockProducts,
 } = require("../controllers/productController");
 const { isAuthenticated, authorizedRoles } = require("../middlewares/auth");
 
 const router = express.Router();
 
 router.route("/products").get(getAllProducts);
+router.route("/products/instock").get(getInStockProducts);
 router
   .route("/products/new")
   .post(isAuthenticated, authorizedRoles("admin"), createProduct);

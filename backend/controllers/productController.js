@@ -18,14 +18,22 @@ exports.createProduct = asyncHandler(async (req, res, next) => {
 exports.getAllProducts = asyncHandler(async (req, res) => {
   const resPerPage = 5;
   const productCount = await Product.countDocuments();
-  const apiFeature = new ApiFeatures(req.query, Product.find())
+  const apiFeature = new ApiFeatures(Product.find(), req.query)
     .search()
-    .filter()
-    .pagination(resPerPage);
+    .filter();
+  // .pagination(resPerPage);
   const products = await apiFeature.query;
   res.status(200).json({
     success: true,
     message: "This route will show all products in database",
+    products,
+  });
+});
+
+exports.getInStockProducts = asyncHandler(async (req, res) => {
+  const products = await Product.find({ stock: { $gt: 0 } });
+  res.status(200).json({
+    success: true,
     products,
   });
 });
@@ -72,7 +80,6 @@ exports.getProductDetails = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     product,
-    productCount,
   });
 });
 
