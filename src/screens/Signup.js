@@ -1,11 +1,13 @@
-import { View, Text, StyleSheet, TextInput, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import React from "react";
 import { useTheme } from "@react-navigation/native";
 import BackButton from "../components/BackButton.js";
 import { FontAwesome } from "@expo/vector-icons";
 import Button from "../components/Button.js";
+import { InputOutline } from "react-native-input-outline";
 export default function Signup() {
   const { colors } = useTheme();
+  const [value, setValue] = React.useState("");
 
   return (
     <View
@@ -29,47 +31,35 @@ export default function Signup() {
           alignItems: "center",
         }}
       >
-        <TextInput
-          style={{
-            backgroundColor: colors.darkColor,
-            width: "70%",
-            color: colors.textColorWhite,
-            paddingLeft: 20,
-            height: 50,
-            width: 300,
-            borderRadius: 5,
-          }}
+        <InputOutline
+          fontColor={colors.textGray}
+          activeColor={colors.primary}
           placeholder="Name"
-          placeholderTextColor={colors.textColorLight}
+          fontSize={14}
+          style={{ marginTop: 15 }}
+          autoCorrect={false}
+          keyboardAppearance="dark"
+          autoCapitalize="words"
+          backgroundColor={colors.darkColor}
         />
-        <TextInput
-          style={{
-            backgroundColor: colors.darkColor,
-            width: "70%",
-            color: colors.textColorWhite,
-            paddingLeft: 20,
-            height: 50,
-            width: 300,
-            borderRadius: 5,
-            marginTop: 20,
-          }}
+        <InputOutline
+          fontColor={colors.textGray}
+          activeColor={colors.primary}
           placeholder="Email"
-          placeholderTextColor={colors.textColorLight}
+          fontSize={14}
+          style={{ marginTop: 15 }}
+          autoCorrect={false}
+          keyboardAppearance="dark"
+          autoCapitalize="words"
+          backgroundColor={colors.darkColor}
         />
-        <TextInput
-          style={{
-            backgroundColor: colors.darkColor,
-            width: "70%",
-            color: colors.textColorWhite,
-            paddingLeft: 20,
-            height: 50,
-            width: 300,
-            borderRadius: 5,
-            marginTop: 20,
-          }}
+        <InputOutline
+          fontColor={colors.textGray}
+          activeColor={colors.primary}
           placeholder="Password"
-          placeholderTextColor={colors.textColorLight}
-          passwordRules="required: lower; required: upper; required: digit; required: [-]; minlength: 8;"
+          fontSize={14}
+          style={{ marginTop: 15 }}
+          backgroundColor={colors.darkColor}
           secureTextEntry={true}
         />
       </View>

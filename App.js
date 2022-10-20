@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
+import { Provider as PaperProvider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import GettingStarted from "./src/screens/GettingStarted";
@@ -115,6 +115,7 @@ export default function App() {
       errorColor: "#FF2424",
       successColor: "#55D85A",
       whiteColor: "#F6F6F6",
+      textGray: "#ABB4BD",
     },
   };
 
@@ -131,12 +132,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
