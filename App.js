@@ -1,5 +1,4 @@
 import { StatusBar } from "expo-status-bar";
-import { Provider as PaperProvider } from "react-native-paper";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import GettingStarted from "./src/screens/GettingStarted";
@@ -17,6 +16,9 @@ import {
   MaterialIcons,
   FontAwesome,
 } from "@expo/vector-icons";
+import { Provider } from "react-redux";
+import { store } from "./src/redux/store";
+import ProductContextProvider from "./src/context/product/ProductContext";
 
 const AuthStack = createNativeStackNavigator();
 const HomeStack = createBottomTabNavigator();
@@ -121,14 +123,16 @@ export default function App() {
 
   return (
     <NavigationContainer theme={Theme}>
-      <MainStack.Navigator
-        screenOptions={{ headerShown: false }}
-        initialRouteName="HomeScreen"
-      >
-        <MainStack.Screen name="Auth" component={AuthStackScreen} />
-        <MainStack.Screen name="HomeScreen" component={Home} />
-      </MainStack.Navigator>
-      <StatusBar style="light" />
+      <ProductContextProvider>
+        <MainStack.Navigator
+          screenOptions={{ headerShown: false }}
+          initialRouteName="HomeScreen"
+        >
+          <MainStack.Screen name="Auth" component={AuthStackScreen} />
+          <MainStack.Screen name="HomeScreen" component={Home} />
+        </MainStack.Navigator>
+        <StatusBar style="light" />
+      </ProductContextProvider>
     </NavigationContainer>
   );
 }
