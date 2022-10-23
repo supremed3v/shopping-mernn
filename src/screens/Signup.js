@@ -5,6 +5,7 @@ import BackButton from "../components/BackButton.js";
 import { FontAwesome } from "@expo/vector-icons";
 import Button from "../components/Button.js";
 import { InputOutline } from "react-native-input-outline";
+
 export default function Signup() {
   const { colors } = useTheme();
   const [value, setValue] = React.useState("");

@@ -1,12 +1,18 @@
 import { View, Text, Pressable } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { useTheme } from "@react-navigation/native";
 import BackButton from "../components/BackButton.js";
 import { FontAwesome } from "@expo/vector-icons";
 import Button from "../components/Button.js";
-import InputOutline from "react-native-input-outline";
-export default function Login() {
+import { InputOutline } from "react-native-input-outline";
+
+function Login() {
   const { colors } = useTheme();
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const onLogin = async () => {
+    console.log("Login");
+  };
 
   return (
     <View
@@ -40,6 +46,8 @@ export default function Login() {
           keyboardAppearance="dark"
           autoCapitalize="words"
           backgroundColor={colors.darkColor}
+          value={email}
+          onChangeText={(text) => setEmail(text)}
         />
         <InputOutline
           fontColor={colors.textGray}
@@ -49,6 +57,8 @@ export default function Login() {
           style={{ marginTop: 15 }}
           backgroundColor={colors.darkColor}
           secureTextEntry={true}
+          value={password}
+          onChangeText={(text) => setPassword(text)}
         />
       </View>
       <Pressable
@@ -72,8 +82,10 @@ export default function Login() {
           marginTop: 40,
         }}
       >
-        <Button title={"LOGIN"} />
+        <Button title={"LOGIN"} onPress={onLogin} />
       </View>
     </View>
   );
 }
+
+export default Login;

@@ -1,13 +1,14 @@
 import { View, Text, Pressable, Image } from "react-native";
-import React, { useState } from "react";
-import { useTheme } from "@react-navigation/native";
+import React, { useContext, useState } from "react";
+import { useNavigation, useTheme } from "@react-navigation/native";
 import Rating from "react-native-easy-rating";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useProductContext } from "../context/product/ProductContext";
 
-export default function ProductCard() {
+export default function ProductCard({ item }) {
   const [rating, setRating] = useState(4);
   const [focused, setFocused] = useState(false);
-
+  const navigation = useNavigation();
   const onFavorites = () => {
     setFocused(!focused);
   };
@@ -19,7 +20,9 @@ export default function ProductCard() {
         paddingHorizontal: 40,
       }}
     >
-      <Pressable>
+      <Pressable
+        onPress={() => navigation.navigate("ProductDetails", { item: item })}
+      >
         <Image
           source={{
             uri: "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=715&q=80",
@@ -34,15 +37,15 @@ export default function ProductCard() {
           onRate={setRating}
         />
         <Text style={{ color: colors.textGray, fontWeight: "300" }}>
-          Product Desc
+          {!item.description ? "No description" : item.description}
         </Text>
         <Text style={{ color: colors.text, fontSize: 20, fontWeight: "600" }}>
-          Product Name
+          {item.name}
         </Text>
         <Text
           style={{ color: colors.textGray, fontSize: 18, fontWeight: "400" }}
         >
-          600 /= PKR
+          {item.price} /= PKR
         </Text>
       </Pressable>
       <Pressable

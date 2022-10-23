@@ -6,12 +6,24 @@ import {
   ScrollView,
   Image,
 } from "react-native";
-import React from "react";
+import React, { useContext, useState } from "react";
 import { useTheme } from "@react-navigation/native";
-import SmallButton from "../components/SmallButton";
+import ProductCard from "../components/ProductCard";
+import { useProductContext } from "../context/product/ProductContext";
 
 export default function MainScreen() {
   const { colors } = useTheme();
+  const [selected, setSelected] = useState(null);
+  const { products, error } = useProductContext();
+
+  if (error) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ color: colors.text }}>Something went wrong</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={{ width: "100%", height: "100%" }}>
       <View style={{ flex: 1, width: "100%", width: "100%" }}>
@@ -53,6 +65,12 @@ export default function MainScreen() {
               <Text style={{ color: colors.textGray }}>
                 Best you could get!
               </Text>
+              <FlatList
+                horizontal={true}
+                data={products}
+                renderItem={({ item }) => <ProductCard item={item} />}
+                keyExtractor={(item) => item.id}
+              />
             </View>
             <View style={{ marginBottom: 40 }}>
               <Text

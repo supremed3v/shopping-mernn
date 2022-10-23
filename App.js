@@ -16,9 +16,10 @@ import {
   MaterialIcons,
   FontAwesome,
 } from "@expo/vector-icons";
-import { Provider } from "react-redux";
-import { store } from "./src/redux/store";
-import ProductContextProvider from "./src/context/product/ProductContext";
+import { AppProvider } from "./src/context/product/ProductContext";
+import ProductDetails from "./src/screens/ProductDetails";
+import ProductCard from "./src/components/ProductCard";
+import { AuthProvider } from "./src/context/user/AuthContext";
 
 const AuthStack = createNativeStackNavigator();
 const HomeStack = createBottomTabNavigator();
@@ -27,7 +28,7 @@ const MainStack = createNativeStackNavigator();
 const AuthStackScreen = () => (
   <AuthStack.Navigator
     screenOptions={{ headerShown: false }}
-    initialRouteName="Signup"
+    initialRouteName="Login"
   >
     <AuthStack.Screen name="GettingStarted" component={GettingStarted} />
     <AuthStack.Screen name="Login" component={Login} />
@@ -123,16 +124,15 @@ export default function App() {
 
   return (
     <NavigationContainer theme={Theme}>
-      <ProductContextProvider>
-        <MainStack.Navigator
-          screenOptions={{ headerShown: false }}
-          initialRouteName="HomeScreen"
-        >
-          <MainStack.Screen name="Auth" component={AuthStackScreen} />
-          <MainStack.Screen name="HomeScreen" component={Home} />
-        </MainStack.Navigator>
-        <StatusBar style="light" />
-      </ProductContextProvider>
+      <MainStack.Navigator
+        screenOptions={{ headerShown: false }}
+        initialRouteName="Auth"
+      >
+        <MainStack.Screen name="Auth" component={AuthStackScreen} />
+        <MainStack.Screen name="HomeScreen" component={Home} />
+        <MainStack.Screen name="ProductDetails" component={ProductDetails} />
+      </MainStack.Navigator>
+      <StatusBar style="light" />
     </NavigationContainer>
   );
 }

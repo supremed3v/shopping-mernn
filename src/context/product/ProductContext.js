@@ -1,35 +1,55 @@
 import axios from "axios";
-import React, { createContext, useReducer, useState, useEffect } from "react";
-import { ProductReducer } from "./ProductReducer";
+import React, { createContext, useReducer, useEffect, useContext } from "react";
+import reducer from "./ProductReducer";
 
-export const ProductContext = createContext({
+const AppContext = createContext();
+
+const initialState = {
   products: [],
-  loading: true,
-});
+  product: {},
+  loading: false,
+  error: false,
+};
 
-const ProductContextProvider = ({ children }) => {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const fetchProducts = async () => {
-    await axios
-      .get("http://192.168.18.8:4000/api/v1/products")
-      .then((res) => {
-        setData(res.data.products);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+const API = "http://192.168.18.8:4000/api/v1/products";
+
+const AppProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const fetchProducts = async (url) => {
+    dispatch({ type: "SET_LOADING" });
+    try {
+      const res = await axios.get(url);
+      const products = await res.data.products;
+      dispatch({ type: "PRODUCTS_REQUEST", payload: products });
+    } catch (error) {
+      dispatch({ type: "API_ERROR" });
+    }
+  };
+
+  const productDetails = async (url) => {
+    dispatch({ type: "SET_LOADING" });
+    try {
+      const res = await axios.get(url);
+      const product = await res.data.products;
+      dispatch({ type: "PRODUCT_DETAILS", payload: product });
+    } catch (error) {
+      dispatch({ type: "API_ERROR" });
+    }
   };
 
   useEffect(() => {
-    fetchProducts();
-    setLoading(false);
+    fetchProducts(API);
   }, []);
+
   return (
-    <ProductContext.Provider value={{ data, loading }}>
+    <AppContext.Provider value={{ ...state, productDetails }}>
       {children}
-    </ProductContext.Provider>
+    </AppContext.Provider>
   );
 };
 
-export default ProductContextProvider;
+const useProductContext = () => {
+  return useContext(AppContext);
+};
+
+export { AppProvider, AppContext, useProductContext };

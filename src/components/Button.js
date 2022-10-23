@@ -4,7 +4,7 @@ import React from "react";
 export default function Button({ title, onPress }) {
   return (
     <Pressable
-      onPress={() => console.log("press") || onPress()}
+      onPress={onPress}
       style={{
         backgroundColor: "#EF3651",
         height: 50,
