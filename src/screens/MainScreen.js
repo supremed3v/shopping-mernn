@@ -10,19 +10,13 @@ import React, { useContext, useState } from "react";
 import { useTheme } from "@react-navigation/native";
 import ProductCard from "../components/ProductCard";
 import { useProductContext } from "../context/product/ProductContext";
+import { AuthContext } from "../context/user/AuthContext";
 
 export default function MainScreen() {
+  const { user } = useContext(AuthContext);
+  console.log(user);
   const { colors } = useTheme();
   const [selected, setSelected] = useState(null);
-  const { products, error } = useProductContext();
-
-  if (error) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text style={{ color: colors.text }}>Something went wrong</Text>
-      </View>
-    );
-  }
 
   return (
     <View style={{ width: "100%", height: "100%" }}>
@@ -65,12 +59,12 @@ export default function MainScreen() {
               <Text style={{ color: colors.textGray }}>
                 Best you could get!
               </Text>
-              <FlatList
+              {/* <FlatList
                 horizontal={true}
                 data={products}
                 renderItem={({ item }) => <ProductCard item={item} />}
                 keyExtractor={(item) => item.id}
-              />
+              /> */}
             </View>
             <View style={{ marginBottom: 40 }}>
               <Text

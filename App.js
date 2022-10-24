@@ -18,8 +18,8 @@ import {
 } from "@expo/vector-icons";
 import { AppProvider } from "./src/context/product/ProductContext";
 import ProductDetails from "./src/screens/ProductDetails";
-import ProductCard from "./src/components/ProductCard";
-import { AuthProvider } from "./src/context/user/AuthContext";
+import { AuthContext, AuthProvider } from "./src/context/user/AuthContext";
+import { useContext } from "react";
 
 const AuthStack = createNativeStackNavigator();
 const HomeStack = createBottomTabNavigator();
@@ -28,7 +28,7 @@ const MainStack = createNativeStackNavigator();
 const AuthStackScreen = () => (
   <AuthStack.Navigator
     screenOptions={{ headerShown: false }}
-    initialRouteName="Login"
+    initialRouteName="Signup"
   >
     <AuthStack.Screen name="GettingStarted" component={GettingStarted} />
     <AuthStack.Screen name="Login" component={Login} />
@@ -37,7 +37,21 @@ const AuthStackScreen = () => (
 );
 
 const Home = () => (
-  <HomeStack.Navigator screenOptions={{ headerShown: false }}>
+  <HomeStack.Navigator
+    screenOptions={{
+      headerShown: false,
+      tabBarShowLabel: false,
+      tabBarStyle: {
+        elevation: 0,
+        backgroundColor: "#2A2C36",
+        borderTopRightRadius: 15,
+        borderTopLeftRadius: 15,
+        height: 60,
+        shadowColor: "#000",
+        elevation: 20,
+      },
+    }}
+  >
     <HomeStack.Screen
       name="Home"
       options={{
@@ -107,6 +121,7 @@ const Home = () => (
 );
 
 export default function App() {
+  const { user } = useContext(AuthContext);
   const Theme = {
     dark: true,
     colors: {
@@ -124,15 +139,22 @@ export default function App() {
 
   return (
     <NavigationContainer theme={Theme}>
-      <MainStack.Navigator
-        screenOptions={{ headerShown: false }}
-        initialRouteName="Auth"
-      >
-        <MainStack.Screen name="Auth" component={AuthStackScreen} />
-        <MainStack.Screen name="HomeScreen" component={Home} />
-        <MainStack.Screen name="ProductDetails" component={ProductDetails} />
-      </MainStack.Navigator>
-      <StatusBar style="light" />
+      <AuthProvider>
+        <AppProvider>
+          <MainStack.Navigator
+            screenOptions={{ headerShown: false }}
+            initialRouteName={user !== null ? "HomeScreen" : "Auth"}
+          >
+            <MainStack.Screen name="Auth" component={AuthStackScreen} />
+            <MainStack.Screen name="HomeScreen" component={Home} />
+            <MainStack.Screen
+              name="ProductDetails"
+              component={ProductDetails}
+            />
+          </MainStack.Navigator>
+        </AppProvider>
+        <StatusBar style="light" />
+      </AuthProvider>
     </NavigationContainer>
   );
 }

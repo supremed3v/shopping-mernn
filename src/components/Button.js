@@ -1,10 +1,10 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
 
-export default function Button({ title, onPress }) {
+export default function Button({ title, func }) {
   return (
     <Pressable
-      onPress={onPress}
+      onPress={func}
       style={{
         backgroundColor: "#EF3651",
         height: 50,

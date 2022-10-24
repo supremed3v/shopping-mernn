@@ -1,14 +1,48 @@
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTheme } from "@react-navigation/native";
 import BackButton from "../components/BackButton.js";
 import { FontAwesome } from "@expo/vector-icons";
 import Button from "../components/Button.js";
 import { InputOutline } from "react-native-input-outline";
+import { signUp } from "../../helpers/AuthApi.js";
+import { useContext } from "react";
+import firebase, { db, auth, storage } from "../../config/firebaseConfig";
+import { updateProfile } from "firebase/auth";
+import { setDoc, doc } from "firebase/firestore";
 
-export default function Signup() {
+export default function Signup({ navigation }) {
   const { colors } = useTheme();
-  const [value, setValue] = React.useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const signUp = async () => {
+    try {
+      const res = await auth.createUserWithEmailAndPassword(email, password);
+      console.log(res);
+      await updateProfile(res.user, {
+        displayName: name,
+      });
+      try {
+        const docRef = doc(db, "Users", res.user.uid);
+        const data = {
+          uid: res.user.uid,
+          displayName: res.user.displayName,
+          email: email,
+          role: "user",
+        };
+        navigation.navigate("HomeScreen");
+        setDoc(docRef, data).then((docRef) => {
+          console.log("Document updated successfully");
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <View
@@ -42,6 +76,8 @@ export default function Signup() {
           keyboardAppearance="dark"
           autoCapitalize="words"
           backgroundColor={colors.darkColor}
+          value={name}
+          onChangeText={(text) => setName(text)}
         />
         <InputOutline
           fontColor={colors.textGray}
@@ -53,6 +89,8 @@ export default function Signup() {
           keyboardAppearance="dark"
           autoCapitalize="words"
           backgroundColor={colors.darkColor}
+          value={email}
+          onChangeText={(text) => setEmail(text)}
         />
         <InputOutline
           fontColor={colors.textGray}
@@ -62,6 +100,8 @@ export default function Signup() {
           style={{ marginTop: 15 }}
           backgroundColor={colors.darkColor}
           secureTextEntry={true}
+          value={password}
+          onChangeText={(text) => setPassword(text)}
         />
       </View>
       <Pressable
@@ -72,6 +112,7 @@ export default function Signup() {
           flexDirection: "row",
           marginTop: 20,
         }}
+        onPress={() => navigation.navigate("Login")}
       >
         <Text style={{ color: colors.whiteColor, marginRight: 10 }}>
           Already have an account?
@@ -85,7 +126,7 @@ export default function Signup() {
           marginTop: 40,
         }}
       >
-        <Button title={"SIGN UP"} />
+        <Button title={"SIGN UP"} func={() => signUp()} />
       </View>
     </View>
   );
