@@ -16,6 +16,7 @@ var firebaseCon = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseCon);
+firebase.firestore().settings({ merge: true });
 
 export const auth = firebase.auth();
 export const db = firebase.firestore();

@@ -6,17 +6,21 @@ import { FontAwesome } from "@expo/vector-icons";
 import Button from "../components/Button.js";
 import { InputOutline } from "react-native-input-outline";
 import firebase, { db, auth, storage } from "../../config/firebaseConfig";
+import { AuthContext } from "../context/user/AuthContext.js";
 
 function Login({ navigation }) {
   const { colors } = useTheme();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [loader, setLoader] = React.useState(false);
+  const { dispatch } = useContext(AuthContext);
+
   const onLogin = async () => {
+    dispatch({ type: "LOGIN_REQUEST" });
     try {
       setLoader(true);
       await auth.signInWithEmailAndPassword(email, password).then((res) => {
-        setLoader(false);
+        dispatch({ type: "LOGIN_SUCCESS", payload: res.user });
         navigation.navigate("HomeScreen");
       });
     } catch (error) {

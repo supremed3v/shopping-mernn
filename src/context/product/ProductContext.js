@@ -1,55 +1,38 @@
 import axios from "axios";
 import React, { createContext, useReducer, useEffect, useContext } from "react";
 import reducer from "./ProductReducer";
-
-const AppContext = createContext();
+import { db } from "../../../config/firebaseConfig";
+import { onSnapshot, collection } from "firebase/firestore";
 
 const initialState = {
-  products: [],
-  product: {},
-  loading: false,
-  error: false,
+  products: null,
 };
+export const AppContext = createContext(initialState);
 
-const API = "http://192.168.18.8:4000/api/v1/products";
-
-const AppProvider = ({ children }) => {
+export const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const fetchProducts = async (url) => {
-    dispatch({ type: "SET_LOADING" });
-    try {
-      const res = await axios.get(url);
-      const products = await res.data.products;
-      dispatch({ type: "PRODUCTS_REQUEST", payload: products });
-    } catch (error) {
-      dispatch({ type: "API_ERROR" });
-    }
-  };
-
-  const productDetails = async (url) => {
-    dispatch({ type: "SET_LOADING" });
-    try {
-      const res = await axios.get(url);
-      const product = await res.data.products;
-      dispatch({ type: "PRODUCT_DETAILS", payload: product });
-    } catch (error) {
-      dispatch({ type: "API_ERROR" });
-    }
-  };
 
   useEffect(() => {
-    fetchProducts(API);
+    const unsub = onSnapshot(
+      collection(db, "Products"),
+      (snapShot) => {
+        let list = [];
+        snapShot.docs.forEach((doc) => {
+          list.push({ id: doc.id, ...doc.data() });
+        });
+        dispatch({ type: "GET_PRODUCTS", payload: list });
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+
+    return () => unsub();
   }, []);
 
   return (
-    <AppContext.Provider value={{ ...state, productDetails }}>
+    <AppContext.Provider value={{ products: state.products, dispatch }}>
       {children}
     </AppContext.Provider>
   );
 };
-
-const useProductContext = () => {
-  return useContext(AppContext);
-};
-
-export { AppProvider, AppContext, useProductContext };

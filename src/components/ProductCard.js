@@ -25,9 +25,10 @@ export default function ProductCard({ item }) {
       >
         <Image
           source={{
-            uri: "https://images.unsplash.com/photo-1618354691373-d851c5c3a990?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=715&q=80",
+            uri: item.images[3],
           }}
           style={{ width: 148, height: 184, borderRadius: 10 }}
+          resizeMode="contain"
         />
         <Rating
           rating={rating}
@@ -37,10 +38,10 @@ export default function ProductCard({ item }) {
           onRate={setRating}
         />
         <Text style={{ color: colors.textGray, fontWeight: "300" }}>
-          {!item.description ? "No description" : item.description}
+          {!item.description ? "No description" : item.description.slice(0, 20)}
         </Text>
         <Text style={{ color: colors.text, fontSize: 20, fontWeight: "600" }}>
-          {item.name}
+          {item.title}
         </Text>
         <Text
           style={{ color: colors.textGray, fontSize: 18, fontWeight: "400" }}

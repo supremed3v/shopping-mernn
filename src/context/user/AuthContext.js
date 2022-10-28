@@ -1,37 +1,43 @@
-import React, { useEffect, useState, createContext } from "react";
-
+import React, { useEffect, useState, createContext, useReducer } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import firebase, { db, auth, storage } from "../../../config/firebaseConfig";
+import AuthReducer from "./AuthReducer";
 
-export const AuthContext = createContext({
-  user: null,
-  loader: true,
-});
+const getUser = async () => {
+  const user = await AsyncStorage.getItem("user");
+  return user ? JSON.parse(user) : null;
+};
+
+const initialState = {
+  currentUser: null ? getUser() : null,
+  loader: false,
+};
+
+export const AuthContext = createContext(initialState);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loader, setLoader] = useState(true);
-  const [userData, setUserData] = useState([]);
+  const [state, dispatch] = useReducer(AuthReducer, initialState);
 
   useEffect(() => {
     const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
-      setUser(user, setLoader(false));
-      setLoader(false);
+      let setUser = async () => {
+        await AsyncStorage.setItem("user", JSON.stringify(user));
+      };
+      user && setUser();
     });
     return unsubscribe;
   }, []);
-  const fetchUserInfo = async () => {
-    const userRef = firebase.firestore().collection("Users").doc(user?.uid);
-    const doc = await userRef.get();
-    const data = doc.data();
-    setUserData(data);
-  };
 
   useEffect(() => {
-    fetchUserInfo();
+    getUser().then((user) => {
+      if (user) {
+        dispatch({ type: "LOGIN_SUCCESS", payload: user });
+      }
+    });
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loader, userData }}>
+    <AuthContext.Provider value={{ currentUser: state.currentUser, dispatch }}>
       {children}
     </AuthContext.Provider>
   );

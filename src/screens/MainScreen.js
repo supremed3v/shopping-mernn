@@ -6,17 +6,29 @@ import {
   ScrollView,
   Image,
 } from "react-native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useTheme } from "@react-navigation/native";
 import ProductCard from "../components/ProductCard";
-import { useProductContext } from "../context/product/ProductContext";
+import {
+  AppContext,
+  useProductContext,
+} from "../context/product/ProductContext";
 import { AuthContext } from "../context/user/AuthContext";
 
 export default function MainScreen() {
-  const { user } = useContext(AuthContext);
-  console.log(user);
+  const { products } = useContext(AppContext);
   const { colors } = useTheme();
+  const [laptops, setLaptops] = useState([]);
+  const [phones, setPhones] = useState([]);
   const [selected, setSelected] = useState(null);
+
+  useEffect(() => {
+    if (products !== 0 && products !== null) {
+      setLaptops(products.filter((item) => item.category === "Laptop"));
+      setPhones(products.filter((item) => item.category === "SmartPhones"));
+    }
+  }, []);
+  console.log(laptops);
 
   return (
     <View style={{ width: "100%", height: "100%" }}>
@@ -28,7 +40,7 @@ export default function MainScreen() {
             }}
             style={{
               width: "100%",
-              height: 250,
+              height: 300,
               borderBottomLeftRadius: 30,
               borderBottomRightRadius: 30,
             }}
@@ -41,15 +53,15 @@ export default function MainScreen() {
               width: "100%",
               fontWeight: "bold",
               letterSpacing: 2,
-              paddingBottom: 20,
-              top: "20%",
+              // paddingBottom: 20,
+              top: "-10%",
               marginLeft: 20,
-              position: "absolute",
+              // position: "absolute",
             }}
           >
             Featured Items
           </Text>
-          <View style={{ paddingTop: 40, paddingHorizontal: 10 }}>
+          <View style={{ paddingTop: 5, paddingHorizontal: 10 }}>
             <View style={{ marginBottom: 40 }}>
               <Text
                 style={{ color: colors.text, fontSize: 30, fontWeight: "700" }}
@@ -59,12 +71,12 @@ export default function MainScreen() {
               <Text style={{ color: colors.textGray }}>
                 Best you could get!
               </Text>
-              {/* <FlatList
+              <FlatList
                 horizontal={true}
-                data={products}
+                data={laptops}
                 renderItem={({ item }) => <ProductCard item={item} />}
                 keyExtractor={(item) => item.id}
-              /> */}
+              />
             </View>
             <View style={{ marginBottom: 40 }}>
               <Text
@@ -79,6 +91,12 @@ export default function MainScreen() {
               >
                 Mobile Accessories
               </Text>
+              <FlatList
+                horizontal={true}
+                data={phones}
+                renderItem={({ item }) => <ProductCard item={item} />}
+                keyExtractor={(item) => item.id}
+              />
             </View>
             <View style={{ marginBottom: 40 }}>
               <Text

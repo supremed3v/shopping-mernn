@@ -28,7 +28,7 @@ const MainStack = createNativeStackNavigator();
 const AuthStackScreen = () => (
   <AuthStack.Navigator
     screenOptions={{ headerShown: false }}
-    initialRouteName="Signup"
+    initialRouteName="Login"
   >
     <AuthStack.Screen name="GettingStarted" component={GettingStarted} />
     <AuthStack.Screen name="Login" component={Login} />
@@ -121,7 +121,7 @@ const Home = () => (
 );
 
 export default function App() {
-  const { user } = useContext(AuthContext);
+  const { currentUser } = useContext(AuthContext);
   const Theme = {
     dark: true,
     colors: {
@@ -143,7 +143,7 @@ export default function App() {
         <AppProvider>
           <MainStack.Navigator
             screenOptions={{ headerShown: false }}
-            initialRouteName={user !== null ? "HomeScreen" : "Auth"}
+            initialRouteName={currentUser !== null ? "HomeScreen" : "Auth"}
           >
             <MainStack.Screen name="Auth" component={AuthStackScreen} />
             <MainStack.Screen name="HomeScreen" component={Home} />
@@ -152,8 +152,8 @@ export default function App() {
               component={ProductDetails}
             />
           </MainStack.Navigator>
+          <StatusBar style="light" />
         </AppProvider>
-        <StatusBar style="light" />
       </AuthProvider>
     </NavigationContainer>
   );

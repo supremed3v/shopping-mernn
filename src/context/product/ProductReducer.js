@@ -5,10 +5,8 @@ const ProductReducer = (state, action) => {
         ...state,
         loading: true,
       };
-    case "PRODUCTS_REQUEST":
+    case "GET_PRODUCTS":
       return {
-        ...state,
-        loading: false,
         products: action.payload,
       };
     case "PRODUCT_DETAILS":

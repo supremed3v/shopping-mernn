@@ -10,7 +10,7 @@ const userReducer = (state, action) => {
       return {
         ...state,
         loading: false,
-        user: action.payload,
+        currentUser: action.payload,
       };
     case "LOGIN_FAIL":
       return {
