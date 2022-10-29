@@ -28,7 +28,6 @@ export default function MainScreen() {
       setPhones(products.filter((item) => item.category === "SmartPhones"));
     }
   }, []);
-  console.log(laptops);
 
   return (
     <View style={{ width: "100%", height: "100%" }}>
@@ -61,7 +60,7 @@ export default function MainScreen() {
           >
             Featured Items
           </Text>
-          <View style={{ paddingTop: 5, paddingHorizontal: 10 }}>
+          <View style={{ paddingTop: 5, paddingHorizontal: 0 }}>
             <View style={{ marginBottom: 40 }}>
               <Text
                 style={{ color: colors.text, fontSize: 30, fontWeight: "700" }}
@@ -72,6 +71,8 @@ export default function MainScreen() {
                 Best you could get!
               </Text>
               <FlatList
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
                 horizontal={true}
                 data={laptops}
                 renderItem={({ item }) => <ProductCard item={item} />}

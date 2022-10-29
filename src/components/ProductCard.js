@@ -17,7 +17,7 @@ export default function ProductCard({ item }) {
     <View
       style={{
         paddingVertical: 40,
-        paddingHorizontal: 40,
+        paddingHorizontal: 20,
       }}
     >
       <Pressable
@@ -41,7 +41,7 @@ export default function ProductCard({ item }) {
           {!item.description ? "No description" : item.description.slice(0, 20)}
         </Text>
         <Text style={{ color: colors.text, fontSize: 20, fontWeight: "600" }}>
-          {item.title}
+          {item.title.length > 10 ? item.title.slice(0, 10) : item.title}
         </Text>
         <Text
           style={{ color: colors.textGray, fontSize: 18, fontWeight: "400" }}

@@ -3,7 +3,7 @@ import React, { useContext, useEffect } from "react";
 import { useTheme } from "@react-navigation/native";
 import BackButton from "../components/BackButton";
 import { Entypo } from "@expo/vector-icons";
-import { AuthContext } from "../context/user/AuthContext";
+import { useCartContext } from "../context/cart/CartContext";
 import Carousel from "react-native-reanimated-carousel";
 import Button from "../components/Button";
 
@@ -12,6 +12,13 @@ export default function ProductDetails({ route, navigation }) {
   console.log(item);
   const { colors } = useTheme();
   const width = Dimensions.get("window").width;
+  const { onAdd, qty } = useCartContext();
+
+  const onAddToCart = () => {
+    onAdd(item, qty);
+    navigation.navigate("Cart");
+  };
+
   return (
     <View>
       <ScrollView>
@@ -73,7 +80,7 @@ export default function ProductDetails({ route, navigation }) {
               marginVertical: 30,
             }}
           >
-            <Button title={"ADD TO CART"} />
+            <Button title={"ADD TO CART"} func={onAddToCart} />
           </View>
         </View>
       </ScrollView>

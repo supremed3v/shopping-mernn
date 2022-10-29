@@ -20,6 +20,7 @@ import { AppProvider } from "./src/context/product/ProductContext";
 import ProductDetails from "./src/screens/ProductDetails";
 import { AuthContext, AuthProvider } from "./src/context/user/AuthContext";
 import { useContext } from "react";
+import { CartProvider } from "./src/context/cart/CartContext";
 
 const AuthStack = createNativeStackNavigator();
 const HomeStack = createBottomTabNavigator();
@@ -141,18 +142,20 @@ export default function App() {
     <NavigationContainer theme={Theme}>
       <AuthProvider>
         <AppProvider>
-          <MainStack.Navigator
-            screenOptions={{ headerShown: false }}
-            initialRouteName={currentUser !== null ? "HomeScreen" : "Auth"}
-          >
-            <MainStack.Screen name="Auth" component={AuthStackScreen} />
-            <MainStack.Screen name="HomeScreen" component={Home} />
-            <MainStack.Screen
-              name="ProductDetails"
-              component={ProductDetails}
-            />
-          </MainStack.Navigator>
-          <StatusBar style="light" />
+          <CartProvider>
+            <MainStack.Navigator
+              screenOptions={{ headerShown: false }}
+              initialRouteName={currentUser !== null ? "HomeScreen" : "Auth"}
+            >
+              <MainStack.Screen name="Auth" component={AuthStackScreen} />
+              <MainStack.Screen name="HomeScreen" component={Home} />
+              <MainStack.Screen
+                name="ProductDetails"
+                component={ProductDetails}
+              />
+            </MainStack.Navigator>
+            <StatusBar style="light" />
+          </CartProvider>
         </AppProvider>
       </AuthProvider>
     </NavigationContainer>
