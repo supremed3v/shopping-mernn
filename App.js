@@ -9,6 +9,7 @@ import Favorites from "./src/screens/Favorites";
 import Cart from "./src/screens/Cart";
 import Profile from "./src/screens/Profile";
 import Shop from "./src/screens/Shop";
+import { StripeProvider } from "@stripe/stripe-react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
   Entypo,
@@ -143,17 +144,19 @@ export default function App() {
       <AuthProvider>
         <AppProvider>
           <CartProvider>
-            <MainStack.Navigator
-              screenOptions={{ headerShown: false }}
-              initialRouteName={currentUser !== null ? "HomeScreen" : "Auth"}
-            >
-              <MainStack.Screen name="Auth" component={AuthStackScreen} />
-              <MainStack.Screen name="HomeScreen" component={Home} />
-              <MainStack.Screen
-                name="ProductDetails"
-                component={ProductDetails}
-              />
-            </MainStack.Navigator>
+            <StripeProvider publishableKey="pk_test_51Lyc8kAubbU9BPA8BjH1LE6nm7PnefGDwIqxzeEVXm0IyxXhAO5Rus0MebYmZ7kTVRdJvkii4JYtwpbsVTcpSB4M00COXWYVSs">
+              <MainStack.Navigator
+                screenOptions={{ headerShown: false }}
+                initialRouteName={currentUser !== null ? "HomeScreen" : "Auth"}
+              >
+                <MainStack.Screen name="Auth" component={AuthStackScreen} />
+                <MainStack.Screen name="HomeScreen" component={Home} />
+                <MainStack.Screen
+                  name="ProductDetails"
+                  component={ProductDetails}
+                />
+              </MainStack.Navigator>
+            </StripeProvider>
             <StatusBar style="light" />
           </CartProvider>
         </AppProvider>
