@@ -1,13 +1,15 @@
 import { View, Text, Image, Pressable, ScrollView } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { useCartContext } from "../context/cart/CartContext";
 import { useNavigation, useTheme } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import Button from "../components/Button";
+import { AuthContext } from "../context/user/AuthContext";
 
 export default function Cart() {
   const { cartItems, totalPrice, onRemove, totalQuantities } = useCartContext();
-
+  const { currentUser } = useContext(AuthContext);
+  console.log(currentUser);
   const { colors } = useTheme();
 
   const navigation = useNavigation();
@@ -166,7 +168,16 @@ export default function Cart() {
               marginBottom: 10,
             }}
           >
-            <Button title={"Checkout"} />
+            <Button
+              title={"Checkout"}
+              func={() =>
+                navigation.navigate("AddressDetails", {
+                  total: totalPrice,
+                  totalQuantities: totalQuantities,
+                  items: cartItems,
+                })
+              }
+            />
           </View>
         </>
       )}

@@ -22,6 +22,7 @@ import ProductDetails from "./src/screens/ProductDetails";
 import { AuthContext, AuthProvider } from "./src/context/user/AuthContext";
 import { useContext } from "react";
 import { CartProvider } from "./src/context/cart/CartContext";
+import Checkout from "./src/screens/Checkout";
 
 const AuthStack = createNativeStackNavigator();
 const HomeStack = createBottomTabNavigator();
@@ -141,10 +142,10 @@ export default function App() {
 
   return (
     <NavigationContainer theme={Theme}>
-      <AuthProvider>
-        <AppProvider>
-          <CartProvider>
-            <StripeProvider publishableKey="pk_test_51Lyc8kAubbU9BPA8BjH1LE6nm7PnefGDwIqxzeEVXm0IyxXhAO5Rus0MebYmZ7kTVRdJvkii4JYtwpbsVTcpSB4M00COXWYVSs">
+      <StripeProvider publishableKey="pk_test_51Lyc8kAubbU9BPA8BjH1LE6nm7PnefGDwIqxzeEVXm0IyxXhAO5Rus0MebYmZ7kTVRdJvkii4JYtwpbsVTcpSB4M00COXWYVSs">
+        <AuthProvider>
+          <AppProvider>
+            <CartProvider>
               <MainStack.Navigator
                 screenOptions={{ headerShown: false }}
                 initialRouteName={currentUser !== null ? "HomeScreen" : "Auth"}
@@ -155,12 +156,13 @@ export default function App() {
                   name="ProductDetails"
                   component={ProductDetails}
                 />
+                <MainStack.Screen name="AddressDetails" component={Checkout} />
               </MainStack.Navigator>
-            </StripeProvider>
-            <StatusBar style="light" />
-          </CartProvider>
-        </AppProvider>
-      </AuthProvider>
+              <StatusBar style="default" />
+            </CartProvider>
+          </AppProvider>
+        </AuthProvider>
+      </StripeProvider>
     </NavigationContainer>
   );
 }
